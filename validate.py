@@ -6,6 +6,15 @@ email_type = {
     'pattern': r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$'
 }
 
+login_format = {
+    'type': 'object',
+    'properties': {
+        'email': email_type
+    },
+    'required': ['email'],
+    'additionalProperties': False
+}
+
 upload_format = {
     'type': 'object',
     'properties': {
@@ -32,7 +41,7 @@ process_format = {
             }
         }
     },
-    'required': ['email', 'file'],
+    'required': ['email', 'fileID', 'options'],
     'additionalProperties': False
 }
 
@@ -44,9 +53,17 @@ download_format = {
             'type': 'string'
         }
     },
-    'required': ['email', 'file'],
+    'required': ['email', 'fileID'],
     'additionalProperties': False
 }
+
+
+def val_login(input):
+    try:
+        validate(input, login_format)
+        return True
+    except ValidationError:
+        return False
 
 
 def val_upload(input):
