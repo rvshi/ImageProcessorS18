@@ -6,4 +6,3 @@ class User(MongoModel):
         password = fields.CharField()
         origImageLink = field.URLField()
         currentImageLink = field.URLField()
-
