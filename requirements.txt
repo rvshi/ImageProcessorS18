@@ -8,4 +8,5 @@ pytest-pep8
 jsonschema
 flask-cors
 gunicorn
+flask-login
 jsonschema
