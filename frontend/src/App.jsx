@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-
+import { req } from './requests';
 import Login from './Login';
 
 class App extends Component {
@@ -15,8 +15,13 @@ class App extends Component {
     this.setState({ [key]: val });
   }
 
-  request = (name) => {
-    // make requests via axios
+  request = (path) => {
+    const { email, password } = this.state;
+    if (path === 'login') {
+      req(path, { email, password }, (res) => {
+        console.log(res);
+      });
+    }
   }
 
   render() {
