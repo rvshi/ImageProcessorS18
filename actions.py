@@ -1,6 +1,10 @@
-from database import login_user
+
+from database import login_user, get_image
 from flask import jsonify, request
 from flask_jwt_simple import create_jwt
+import logging
+
+connect("mongodb://localhost:27017/database")
 
 
 def act_login(req):
@@ -29,4 +33,10 @@ def act_process(req):
 
 
 def act_download(req):
-    pass
+    '''Processes download request
+
+    :param req: json request from client
+    '''
+    img_str = get_image()
+    filetype = req['filetype']
+    return jsonify({'image': img_str, 'filetype': filetype})

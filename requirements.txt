@@ -14,3 +14,5 @@ scikit-image
 
 pytest
 pytest-pep8
+
+h5py
