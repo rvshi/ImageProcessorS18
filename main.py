@@ -1,10 +1,15 @@
 from flask import Flask, request, jsonify
+from flask_jwt_simple import (
+    JWTManager, jwt_required, get_jwt_identity
+)
 from flask_cors import CORS
 from validate import val_login, val_upload, val_process, val_download
 from actions import act_login, act_upload, act_process, act_download
-import datetime
+from secret_key import SECRET_KEY
 
 app = Flask(__name__)
+app.config['JWT_SECRET_KEY'] = SECRET_KEY
+jwt = JWTManager(app)
 CORS(app)
 
 
@@ -17,35 +22,43 @@ def handler(input, validator, action):
     :return: jsonified response
     """
 
-    if(not validator(input)):
-        response = jsonify({
-            'error': 'Request was incorrectly formatted.',
-            'code': 400
-        })
+    if not request.is_json:
+        return jsonify({"error": "JSON missing"}), 400
+    elif(not validator(input)):
+        return jsonify({'error': 'Request was incorrectly formatted.'}), 400
     else:
         (response, code) = action(input)
-    return response, code
+        return response, code
 
 
 @app.route('/login', methods=['POST'])
-def login(email):
+def login():
     r = request.get_json()
     return handler(r, val_login, act_login)
 
 
+@app.route("/validate", methods=["GET"])
+@jwt_required
+def validate():
+    return jsonify({"username": get_jwt_identity()}), 200
+
+
 @app.route("/upload", methods=["POST"])
+@jwt_required
 def upload():
     r = request.get_json()
     return handler(r, val_upload, act_upload)
 
 
 @app.route("/process", methods=["POST"])
+@jwt_required
 def process():
     r = request.get_json()
     return handler(r, val_process, act_process)
 
 
 @app.route("/download", methods=["POST"])
+@jwt_required
 def download():
     r = request.get_json()
     return handler(r, val_download, act_download)

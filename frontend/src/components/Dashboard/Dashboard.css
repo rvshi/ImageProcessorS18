@@ -1,0 +1,62 @@
+.Dashboard {
+  text-align: center;
+  color: #333;
+}
+
+.Dashboard button {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.Dashboard button:hover {
+  color: white;
+}
+
+.Menubar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: 15px;
+  background: white;
+  box-sizing: border-box;
+  background: rgba(255, 255, 255, 0.8);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+  color: #222;
+}
+
+.Menubar h1 {
+  font-family: 'Black Han Sans', sans-serif;
+  font-size: 2.5em;
+  margin: 0;
+}
+
+.Menubar .info>div {
+  display: inline-block;
+  margin: 0.2em .3em;
+}
+
+.Menubar .username {
+  color: #E73C7E;
+  font-weight: bold;
+}
+
+.Menubar .interpunct {
+  font-weight: bold;
+}
+
+.Menubar .logout {
+  transition: 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  cursor: pointer;
+}
+
+.Menubar .logout:hover {
+  color: #E73C7E;
+}
+
+.Viewer {
+  margin-top: 150px;
+}
+
+.Viewer img {
+  height: 300px;
+}
