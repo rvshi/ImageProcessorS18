@@ -10,3 +10,4 @@ flask-cors
 gunicorn
 flask-login
 jsonschema
+h5py
