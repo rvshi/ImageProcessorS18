@@ -1,7 +1,7 @@
 .Notifications {
   position: absolute;
   right: 0;
-  top: 0;
+  bottom: 0;
   z-index: 10001;
 }
 
@@ -9,7 +9,7 @@
   min-width: 350px;
   padding: 0 20px;
   border-radius: 6px;
-  margin-top: 10px;
+  margin-bottom: 10px;
   margin-right: 10px;
   text-align: center;
   height: 45px;

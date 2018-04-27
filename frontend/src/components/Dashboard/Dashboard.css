@@ -3,6 +3,14 @@
   color: #333;
 }
 
+.Dashboard button {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.Dashboard button:hover {
+  color: white;
+}
+
 .Menubar {
   position: fixed;
   top: 0;
@@ -43,4 +51,12 @@
 
 .Menubar .logout:hover {
   color: #E73C7E;
+}
+
+.Viewer {
+  margin-top: 150px;
+}
+
+.Viewer img {
+  height: 300px;
 }
