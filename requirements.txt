@@ -1,3 +1,4 @@
+matplotlib
 numpy
 scipy
 scikit-image
@@ -10,3 +11,4 @@ flask-cors
 gunicorn
 flask-login
 jsonschema
+opencv-python
