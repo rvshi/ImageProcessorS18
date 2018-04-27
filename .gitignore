@@ -104,3 +104,6 @@ ENV/
 
 # database
 db
+
+secret_key.py
+db_debug.py
