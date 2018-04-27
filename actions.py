@@ -38,6 +38,10 @@ def act_process(req):
 
 
 def act_download(req):
+    '''Processes download request
+
+    :param req: json request from client
+    '''
     img_str = get_image()
     filetype = req['filetype']
     return jsonify({'image': img_str, 'filetype': filetype})
