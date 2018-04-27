@@ -6,11 +6,12 @@ from uuid import uuid4
 
 
 def convert_image(img_str):
-    '''Converts image from base64 to uint array
+    '''Converts image base64 string to uint array
 
-    :param img_str: Image in base64 string
-    :returns img_arr: Image in uint array
+    :param img_str: base64 image string
+    :return data: grayscale image array
     '''
+
     uuid = uuid4().hex
     filename = 'temp_{}.mat'.format(uuid)
     file = open(filename, 'w')
