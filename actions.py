@@ -3,6 +3,7 @@ from model import User
 from pymodm.errors import DoesNotExist
 from pymodm import connect
 import logging
+from database.py import get_image()
 
 connect("mongodb://localhost:27017/database")
 
@@ -37,4 +38,6 @@ def act_process(req):
 
 
 def act_download(req):
-    pass
+    img_str = get_image()
+    filetype = req['filetype']
+    return jsonify({'image': img_str, 'filetype': filetype})
