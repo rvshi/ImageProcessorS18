@@ -1,0 +1,48 @@
+.Login {
+    text-align: center;
+    color: white;
+    position: absolute;
+    width: 100%;
+    top: 50%;
+    margin-top: -300px;
+}
+
+.Login-circle {
+    margin: 0 auto;
+    width: 500px;
+    height: 500px;
+    border-radius: 300px;
+    box-sizing: border-box;
+    background: white;
+    background: linear-gradient(45deg, #E73C7E, #23A6D5, #23D5AB);
+    border: 1px solid white;
+    padding: 30px;
+    padding-top: 70px;
+    transition: background-color 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.Login h1 {
+    font-family: 'Black Han Sans', sans-serif;
+    font-size: 2.5em;
+}
+
+@media (max-width: 600px) {
+    .Login-circle {
+        margin: 0 auto;
+        width: 100%;
+        height: auto;
+        border-radius: 0;
+        border: 0;
+        background: transparent;
+        padding-top: 0;
+    }
+}
+
+@media (max-height: 600px) {
+    .Login {
+        text-align: center;
+        color: white;
+        position: relative;
+        margin-top: 50px;
+    }
+}
