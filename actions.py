@@ -1,10 +1,4 @@
-from flask import jsonify
-from model import User
-from pymodm.errors import DoesNotExist
-from pymodm import connect
 import logging
-
-connect("mongodb://localhost:27017/database")
 
 
 def act_login(req):
