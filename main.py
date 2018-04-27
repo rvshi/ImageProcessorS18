@@ -1,6 +1,6 @@
 from flask import Flask, request, jsonify
 from flask_jwt_simple import (
-    JWTManager, jwt_required
+    JWTManager, jwt_required, get_jwt_identity
 )
 from flask_cors import CORS
 from validate import val_login, val_upload, val_process, val_download
@@ -9,6 +9,7 @@ from secret_key import SECRET_KEY
 
 app = Flask(__name__)
 app.config['JWT_SECRET_KEY'] = SECRET_KEY
+jwt = JWTManager(app)
 CORS(app)
 
 
@@ -31,9 +32,15 @@ def handler(input, validator, action):
 
 
 @app.route('/login', methods=['POST'])
-def login(email):
+def login():
     r = request.get_json()
     return handler(r, val_login, act_login)
+
+
+@app.route("/validate", methods=["GET"])
+@jwt_required
+def validate():
+    return jsonify({"username": get_jwt_identity()}), 200
 
 
 @app.route("/upload", methods=["POST"])

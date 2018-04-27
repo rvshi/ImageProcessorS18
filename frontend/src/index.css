@@ -6,11 +6,8 @@ body {
   font-family: 'Muli', sans-serif;
   width: 100%;
   min-height: 100%;
-  background: linear-gradient(-45deg, #EE7752, #E73C7E, #23A6D5, #23D5AB);
-  background-size: 600% 600%;
-  -webkit-animation: AnimationName 35s ease infinite;
-  -moz-animation: AnimationName 35s ease infinite;
-  animation: AnimationName 35s ease infinite;
+  background: linear-gradient(215deg, #E73C7E, #23A6D5, #23D5AB);
+  background-size: 120% 120%;
 }
 
 @-webkit-keyframes AnimationName {

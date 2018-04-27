@@ -14,7 +14,8 @@
     border-radius: 300px;
     box-sizing: border-box;
     background: white;
-    background: linear-gradient(45deg, #E73C7E, #23A6D5, #23D5AB);
+    background: linear-gradient(215deg, #E73C7E, #23A6D5, #23D5AB);
+    background-size: 100% 110%;
     border: 1px solid white;
     padding: 30px;
     padding-top: 70px;

@@ -9,7 +9,10 @@ email_type = {
 login_format = {
     'type': 'object',
     'properties': {
-        'username': email_type
+        'username': email_type,
+        'password': {
+            'type': 'string'
+        },
     },
     'required': ['username'],
     'additionalProperties': False
