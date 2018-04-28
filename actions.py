@@ -9,28 +9,27 @@ import scipy.io
 import matplotlib
 import model
 
-connect("mongodb://localhost:27017/database")
+from database import login_user, get_image
+from flask import jsonify, request
+from flask_jwt_simple import create_jwt
+import logging
 
 
 def act_login(req):
     """Authenticates login with email
 
-        :param req: json request from client
+    : param req: json request from client
     """
-    email = req['email']
+    params = request.get_json()
+    username = params.get('username', None)
+    password = params.get('password', None)
 
-    try:
-        user = User.objects.raw({'_id': email}).first()
-    except DoesNotExist:
-        logging.exception('User does not exist.')
-        res = {
-            'email': email,
-            'login_success': False,
-            'error': 'User does not exist'
-        }
-        return (jsonify(res), 400)
+    # check if user exists and the password is correct
+    if login_user(username, password):
+        res = {'jwt': create_jwt(identity=username)}
+        return jsonify(res), 200
 
-    return jsonify({'email': email, 'login_success': True})
+    return jsonify({'error': 'username or password is incorrect'}), 400
 
 
 def act_upload(req):

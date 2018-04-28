@@ -1,6 +1,6 @@
 from jsonschema import validate, ValidationError
 
-# Regex from http://emailregex.com
+# Regex from http://usernameregex.com
 email_type = {
     'type': 'string',
     'pattern': r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$'
@@ -9,28 +9,31 @@ email_type = {
 login_format = {
     'type': 'object',
     'properties': {
-        'email': email_type
+        'username': email_type,
+        'password': {
+            'type': 'string'
+        },
     },
-    'required': ['email'],
+    'required': ['username'],
     'additionalProperties': False
 }
 
 upload_format = {
     'type': 'object',
     'properties': {
-        'email': email_type,
+        'username': email_type,
         'file': {
             'binaryEncoding': 'base64'
         }
     },
-    'required': ['email', 'file'],
+    'required': ['username', 'file'],
     'additionalProperties': False
 }
 
 process_format = {
     'type': 'object',
     'properties': {
-        'email': email_type,
+        'username': email_type,
         'fileID': {
             'type': 'string'
         },
@@ -41,19 +44,19 @@ process_format = {
             }
         }
     },
-    'required': ['email', 'fileID', 'options'],
+    'required': ['username', 'fileID', 'options'],
     'additionalProperties': False
 }
 
 download_format = {
     'type': 'object',
     'properties': {
-        'email': email_type,
+        'username': email_type,
         'fileID': {
             'type': 'string'
         }
     },
-    'required': ['email', 'fileID'],
+    'required': ['username', 'fileID'],
     'additionalProperties': False
 }
 

@@ -101,3 +101,9 @@ ENV/
 .mypy_cache/
 
 .pytest_cache/
+
+# database
+db
+
+secret_key.py
+db_debug.py
