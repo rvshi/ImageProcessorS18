@@ -4,8 +4,6 @@ from flask import jsonify, request
 from flask_jwt_simple import create_jwt
 import logging
 
-connect("mongodb://localhost:27017/database")
-
 
 def act_login(req):
     '''Authenticates login with email

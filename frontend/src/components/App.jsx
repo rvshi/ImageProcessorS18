@@ -6,16 +6,17 @@ import Notifications from './Notifications';
 
 const MAX_FILE_SIZE = 1024 * 1024 * 4;
 const SUPPORTED_FILE_TYPES = ['image/jpeg', 'image/png'];
+const defaultState = {
+  username: '',
+  password: '',
+  jwt: null,
+  loggedIn: false,
+  images: null
+};
 class App extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      username: '',
-      password: '',
-      jwt: null,
-      loggedIn: false,
-      images: null
-    };
+    this.state = defaultState;
   }
 
   componentDidMount() {
@@ -47,11 +48,7 @@ class App extends Component {
   }
 
   logout = () => {
-    this.setState({
-      username: '',
-      jwt: null,
-      loggedIn: false
-    });
+    this.setState(defaultState);
     localStorage.setItem('jwt', 'undefined'); // remove jwt
   }
 
