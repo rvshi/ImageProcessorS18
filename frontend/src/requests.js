@@ -1,8 +1,6 @@
 import axios from 'axios';
 
-const baseURL = process.env.NODE_ENV === 'production' ?
-    'http://vcm-4141.vm.duke.edu:5000' :
-    'http://localhost:5000';
+const baseURL = 'https://vcm-4141.vm.duke.edu';
 
 export const req = (jwt, path, body, cb) => {
   if (jwt) {
