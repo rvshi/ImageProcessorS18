@@ -3,7 +3,7 @@ from model import User
 from pymodm.errors import DoesNotExist
 from pymodm import connect
 import logging
-from database.py import get_image()
+from database.py import get_image
 from segment import segment
 import scipy.io
 import matplotlib
@@ -41,7 +41,6 @@ def act_upload(req):
     matfile = req['matfile']
     segment(matfile)
     pass
-
 
 
 def act_download(req):
