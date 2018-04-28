@@ -1,4 +1,3 @@
-matplotlib
 flask
 flask-cors
 flask-jwt-simple
@@ -9,12 +8,12 @@ jsonschema
 
 gunicorn
 
-numpy
-scipy
-scikit-image
-
 pytest
 pytest-pep8
 
+numpy
+scipy
+scikit-image
 h5py
 opencv-python
+matplotlib

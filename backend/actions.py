@@ -1,18 +1,12 @@
 from flask import jsonify
-from model import User
-from pymodm.errors import DoesNotExist
-from pymodm import connect
-import logging
-from database.py import get_image
-from segment import segment
-import scipy.io
-import matplotlib
-import model
-
-from database import login_user, get_image
 from flask import jsonify, request
 from flask_jwt_simple import create_jwt
-import logging
+
+from pymodm.errors import DoesNotExist
+from pymodm import connect
+
+from segment import segment
+from database import login_user, get_image
 
 
 def act_login(req):
@@ -39,6 +33,11 @@ def act_upload(req):
     """
     matfile = req['matfile']
     segment(matfile)
+
+
+def act_process(req):
+    """Processes image that has already been uploaded
+    """
     pass
 
 
@@ -47,6 +46,6 @@ def act_download(req):
 
     :param req: json request from client
     '''
-    img_str = get_image()
+    img_str = get_image(req.username)
     filetype = req['filetype']
     return jsonify({'image': img_str, 'filetype': filetype})
