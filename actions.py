@@ -1,3 +1,13 @@
+from flask import jsonify
+from model import User
+from pymodm.errors import DoesNotExist
+from pymodm import connect
+import logging
+from database.py import get_image
+from segment import segment
+import scipy.io
+import matplotlib
+import model
 
 from database import login_user, get_image
 from flask import jsonify, request
@@ -6,10 +16,10 @@ import logging
 
 
 def act_login(req):
-    '''Authenticates login with email
+    """Authenticates login with email
 
     : param req: json request from client
-    '''
+    """
     params = request.get_json()
     username = params.get('username', None)
     password = params.get('password', None)
@@ -23,10 +33,12 @@ def act_login(req):
 
 
 def act_upload(req):
-    pass
+    """Uploads user image and processes image
 
-
-def act_process(req):
+        :param req: .mat file from client
+    """
+    matfile = req['matfile']
+    segment(matfile)
     pass
 
 

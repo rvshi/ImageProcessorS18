@@ -1,3 +1,4 @@
+matplotlib
 flask
 flask-cors
 flask-jwt-simple
@@ -16,3 +17,4 @@ pytest
 pytest-pep8
 
 h5py
+opencv-python
