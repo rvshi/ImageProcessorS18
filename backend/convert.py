@@ -14,7 +14,7 @@ def convert_image(img_str):
     '''
 
     uuid = uuid4().hex
-    filename = 'temp/temp_{}.mat'.format(uuid)
+    filename = 'images/{}.mat'.format(uuid)
     file = open(filename, 'wb')
     file.write(base64.b64decode(img_str))
     file.close()
