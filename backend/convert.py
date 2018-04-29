@@ -40,3 +40,15 @@ def get_image_by_uuid(uuid):
             return im_arr
 
     return None
+
+
+def save_image_from_arr(img_arr):
+    '''Converts uint array to png file
+
+    :param img_arr: uint array
+    :return uuid: uuid of converted image'''
+
+    uuid = uuid4().hex
+    img = Image.fromarray(img_arr)
+    img.save('images/{}.png'.format(uuid))
+    return uuid

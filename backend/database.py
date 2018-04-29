@@ -49,10 +49,18 @@ def login_user(username, password):
     return False
 
 
-def save_image_uuid(username, uuid):
+def save_orig_image_uuid(username, uuid):
     try:
         user = User.objects.raw({'_id': username}).first()
-        user.images.append(uuid)
+        user.orig_image = uuid
+    except DoesNotExist:
+        return None
+
+
+def save_current_image_uuid(username, uuid):
+    try:
+        user = User.objects.raw({'_id': username}).first()
+        user.current_image = uuid
     except DoesNotExist:
         return None
 

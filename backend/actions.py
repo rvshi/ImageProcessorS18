@@ -7,7 +7,7 @@ from pymodm import connect
 
 from segment import segment
 from database import (login_user, get_current_image, get_orig_image,
-                      save_image_uuid)
+                      save_orig_image_uuid, save_current_image_uuid)
 from convert import save_image, get_image_by_uuid
 
 
@@ -35,7 +35,7 @@ def act_upload(req):
     img_str = req['file']
     user = req['username']
     uuid = save_image(img_str)
-    save_image_uuid(user, uuid)
+    save_orig_image_uuid(user, uuid)
     return jsonify({'fileID': uuid})
 
 
@@ -44,7 +44,9 @@ def act_process(req):
 
     :param req: request from client
     """
-    pass
+    user = req['username']
+    uuid = segment
+    save_current_image_uuid(user, uuid)
 
 
 def act_download(req):
