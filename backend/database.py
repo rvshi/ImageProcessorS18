@@ -8,7 +8,8 @@ connect("mongodb://localhost:27017/database")
 class User(MongoModel):
     email = fields.EmailField(primary_key=True)
     password = fields.CharField()
-    image = fields.CharField()  # the most recent image
+    orig_image = fields.CharField()  # original image
+    curr_image = fields.CharField()
 
 
 def add_user(username, password):
@@ -48,17 +49,26 @@ def login_user(username, password):
     return False
 
 
-def save_image(username, image_str):
-    user = User.objects.raw({'_id': username}).first()
-    user.update(
-        {'$set': {'image': image_str}})
+def save_image_uuid(username, uuid):
+    try:
+        user = User.objects.raw({'_id': username}).first()
+        user.images.append(uuid)
+    except DoesNotExist:
+        return None
 
 
-def get_image(username):
+def get_orig_image(username):
+    try:
+        user = User.objects.raw({'_id': username}).first()
+        return user.orig_image
+    except DoesNotExist:
+        return None
+
+
+def get_current_image(username):
     try:
         user = User.objects.raw({'_id': username}).first()
         return user.image
     except DoesNotExist:
         pass
-
-    return None
+    return user.current_image
