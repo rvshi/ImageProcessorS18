@@ -14,7 +14,8 @@ def save_image(img_str):
     :return uuid: UUID4 of image'''
 
     uuid = uuid4().hex
-    matches = re.match(img_str, 'data:(.*);.*?, (.*)')
+    img_str_esc = re.escape(img_str)
+    matches = re.match('data:(.*);.*?,(.*)', img_str_esc)
     extension = guess_extension(matches[1])
     img = matches[2]
     filename = 'images/{}.{}'.format(uuid, extension)
