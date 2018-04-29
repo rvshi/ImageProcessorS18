@@ -52,3 +52,24 @@ def save_image_from_arr(img_arr):
     img = Image.fromarray(img_arr)
     img.save('images/{}.png'.format(uuid))
     return uuid
+
+
+def get_image_as_b64(uuid, filetype='png'):
+    '''Gets b64 image by uuid
+
+    :param uuid: uuid of image
+    :return: b64 string of image
+    '''
+
+    extension = None
+    if filetype == 'png':
+        extension = 'png'
+    elif filetype == 'jpeg':
+        extension = 'jpg'
+
+    filename = 'images/{}.{}'.format(uuid, extension)
+    with open(filename, 'rb') as f:
+        img_str = base64.b64encode(f.read())
+        return img_str
+
+    return None

@@ -8,7 +8,7 @@ from pymodm import connect
 from segment import segment
 from database import (login_user, get_current_image, get_orig_image,
                       save_orig_image_uuid, save_current_image_uuid)
-from convert import save_image, get_image_by_uuid
+from convert import save_image, get_image_by_uuid, get_image_as_b64
 
 
 def act_login(req):
@@ -47,6 +47,8 @@ def act_process(req):
     user = req['username']
     uuid = segment
     save_current_image_uuid(user, uuid)
+    process_str = get_image_as_b64(uuid)
+    return jsonify({'file': process_str})
 
 
 def act_download(req):
@@ -54,6 +56,8 @@ def act_download(req):
 
     :param req: json request from client
     '''
-    img_str = get_current_image(req.username)
+    user = req['username']
+    uuid = get_current_image(user)
     filetype = req['filetype']
-    return jsonify({'image': img_str, 'filetype': filetype})
+    img_str = get_image_as_b64(uuid, filetype=filetype)
+    return jsonify({'file': img_str})
