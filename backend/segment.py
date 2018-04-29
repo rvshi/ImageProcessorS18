@@ -1,7 +1,6 @@
 # import matplotlib.pyplot as plt
 from skimage import filters
 from skimage import exposure
-from convert import convert_image
 import scipy.ndimage as ndimage
 from convert import get_image_by_uuid, save_image_from_arr
 
