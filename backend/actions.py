@@ -6,7 +6,9 @@ from pymodm.errors import DoesNotExist
 from pymodm import connect
 
 from segment import segment
-from database import login_user, get_image
+from database import (login_user, get_current_image, get_orig_image,
+                      save_image_uuid)
+from convert import save_image, get_image_by_uuid
 
 
 def act_login(req):
@@ -27,16 +29,20 @@ def act_login(req):
 
 
 def act_upload(req):
-    """Uploads user image and processes image
-
-        :param req: .mat file from client
+    """Uploads user image
+        :param req: request from client
     """
-    matfile = req['matfile']
-    segment(matfile)
+    img_str = req['file']
+    user = req['username']
+    uuid = save_image(img_str)
+    save_image_uuid(user, uuid)
+    return jsonify({'fileID': uuid})
 
 
 def act_process(req):
     """Processes image that has already been uploaded
+
+    :param req: request from client
     """
     pass
 
@@ -46,6 +52,6 @@ def act_download(req):
 
     :param req: json request from client
     '''
-    img_str = get_image(req.username)
+    img_str = get_current_image(req.username)
     filetype = req['filetype']
     return jsonify({'image': img_str, 'filetype': filetype})
