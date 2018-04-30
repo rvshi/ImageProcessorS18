@@ -5,6 +5,7 @@
 
 .Dashboard button {
   color: rgba(255, 255, 255, 0.6);
+  font-size: 1em;
 }
 
 .Dashboard button:hover {
@@ -19,7 +20,7 @@
   padding: 15px;
   background: white;
   box-sizing: border-box;
-  background: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.5);
   border-bottom: 1px solid rgba(255, 255, 255, 0.3);
   color: #222;
 }

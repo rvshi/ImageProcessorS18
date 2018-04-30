@@ -1,6 +1,7 @@
 import axios from 'axios';
 
-const baseURL = 'https://vcm-4141.vm.duke.edu';
+let baseURL = 'https://vcm-4141.vm.duke.edu';
+baseURL = 'http://localhost:5000';
 
 export const req = (jwt, path, body, cb) => {
   if (jwt) {
