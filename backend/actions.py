@@ -7,15 +7,15 @@ from pymodm import connect
 
 from segment import segment
 from database import(login_user,
-                     get_current_image,
-                     get_orig_image,                     save_orig_image_uuid,
-                     save_current_image_uuid,
+                     get_processed_image,
+                     get_original_image,                     save_original_image_uuid,
+                     save_processed_image_uuid,
                      remove_images)
 from convert import save_image, get_image_by_uuid, get_image_as_b64
 
 
 def act_login(req):
-    """Authenticates login with email
+    """Authenticates login with email and password
 
     : param req: json request from client
     """
@@ -32,44 +32,61 @@ def act_login(req):
 
 
 def act_upload(req):
-    """Uploads user image
-        :param req: request from client
-    """
-    img_str = req['file']
-    user = req['username']
-
-    uuid = save_image(img_str)
-    if uuid is None:
-        return (jsonify({'error': 'Error saving image'}), 400)
-
-    remove_images(user)
-    save_orig_image_uuid(user, uuid)
-    return (jsonify({'fileID': uuid}), 200)
-
-
-def act_process(req):
-    """Processes image that has already been uploaded
+    """Uploads original user image
 
     :param req: request from client
     """
-    print('process')
+    params = request.get_json()
+    username = params.get('username', None)
+    file = params.get('file', None)
 
-    user = req['username']
-    uuid = get_orig_image(user)
+    uuid = save_image(file)
     if uuid is None:
-        return (jsonify({'error': 'Image not found'}), 400)
+        return (jsonify({'error': 'Error saving image'}), 400)
+
+    remove_images(username)
+    save_original_image_uuid(username, uuid)
+    return (jsonify({'fileID': uuid}), 200)
+
+
+def act_list(username):
+    """Lists the original and processed images for a user
+
+    :param username: client username
+    """
+    return(jsonify({
+        'originalID': get_original_image(username),
+        'processedID': get_processed_image(username)
+    }), 200)
+
+
+def act_process(req):
+    """Processes the original image that has been uploaded
+
+    :param req: request from client
+    """
+
+    username = request.get_json().get('username', None)
+
+    uuid = get_original_image(username)
+    if uuid is None:
+        return (jsonify({'error': 'Original image not found'}), 400)
     newUuid = segment(uuid)
-    save_current_image_uuid(user, newUuid)
+    save_processed_image_uuid(username, newUuid)
     return (jsonify({'fileID': newUuid}), 200)
 
 
 def act_download(req):
-    '''Processes download request
+    '''Handles download request for images
 
     :param req: json request from client
     '''
-    user = req['username']
-    uuid = get_current_image(user)
-    filetype = req['filetype']
+    params = request.get_json()
+    username = params.get('username', None)
+    filetype = params.get('filetype', None)
+
+    uuid = get_processed_image(username)
+    if uuid is None:
+        return (jsonify({'error': 'Processed image not found'}), 400)
     img_str = get_image_as_b64(uuid, filetype=filetype)
     return (jsonify({'file': img_str}), 200)

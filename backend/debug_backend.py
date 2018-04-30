@@ -12,9 +12,11 @@ pw = '12345'
 
 def main():
     headers = login(un, pw)
-    print(upload(headers, un, test_img))
-    print(process(headers, un))
-    download(headers, un, filetype)
+    print(_list(headers, un))
+    origID = upload(headers, un, test_img)
+    procID = process(headers, un)
+    download(headers, un, procID, filetype)
+    print(_list(headers, un))
 
 
 def read_image(path):
@@ -37,6 +39,11 @@ def login(username, password):
     return __headers__
 
 
+def _list(headers, username):
+    r = requests.get(baseURL + 'list', headers=headers)
+    return r.text
+
+
 def upload(headers, username, test_img):
     body = {
         'username': username,
@@ -54,9 +61,10 @@ def process(headers, username):
     return r.json()['fileID']
 
 
-def download(headers, username, img_format):
+def download(headers, username, fileID, img_format):
     body = {
         'username': username,
+        'fileID': fileID,
         'filetype': img_format
     }
     r = requests.post(baseURL + 'download', headers=headers, json=body)

@@ -7,10 +7,10 @@ connect("mongodb://localhost:27017/database")
 
 
 class User(MongoModel):
-    email = fields.EmailField(primary_key=True)
+    username = fields.EmailField(primary_key=True)
     password = fields.CharField()
-    orig_image = fields.CharField()  # original image
-    curr_image = fields.CharField()
+    original_image = fields.CharField()  # original image
+    processed_image = fields.CharField()
 
 
 def add_user(username, password):
@@ -50,36 +50,36 @@ def login_user(username, password):
     return False
 
 
-def save_orig_image_uuid(username, uuid):
+def save_original_image_uuid(username, uuid):
     try:
         user = User.objects.raw({'_id': username}).first()
-        user.orig_image = uuid
+        user.original_image = uuid
         user.save()
     except DoesNotExist:
         return None
 
 
-def save_current_image_uuid(username, uuid):
+def save_processed_image_uuid(username, uuid):
     try:
         user = User.objects.raw({'_id': username}).first()
-        user.curr_image = uuid
+        user.processed_image = uuid
         user.save()
     except DoesNotExist:
         return None
 
 
-def get_orig_image(username):
+def get_original_image(username):
     try:
         user = User.objects.raw({'_id': username}).first()
-        return user.orig_image
+        return user.original_image
     except DoesNotExist:
         return None
 
 
-def get_current_image(username):
+def get_processed_image(username):
     try:
         user = User.objects.raw({'_id': username}).first()
-        return user.curr_image
+        return user.processed_image
     except DoesNotExist:
         return None
 
@@ -94,10 +94,10 @@ def delete_image(name):
 def remove_images(username):
     try:
         user = User.objects.raw({'_id': username}).first()
-        if user.orig_image is not None:
-            delete_image(user.orig_image)
-        if user.curr_image is not None:
-            delete_image(user.curr_image)
+        if user.original_image is not None:
+            delete_image(user.original_image)
+        if user.processed_image is not None:
+            delete_image(user.processed_image)
         return True
     except DoesNotExist:
         return False
