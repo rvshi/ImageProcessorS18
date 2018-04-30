@@ -26,11 +26,9 @@ def save_image(img_str):
         except AttributeError:  # no match found
             return None
 
-        filename = 'images/{}.{}'.format(uuid, extension)
-        file = open(filename, 'wb')
-        file.write(base64.b64decode(img_raw))
-        file.close()
-        return uuid
+        with open('images/{}.{}'.format(uuid, extension), 'wb') as f:
+            f.write(base64.b64decode(img_raw))
+            return uuid
 
     return None
 
@@ -62,14 +60,15 @@ def save_image_from_arr(img_arr):
 
     uuid = uuid4().hex
     img = Image.fromarray(img_arr)
-    img.save('images/{}.png'.format(uuid))
+    img.save('images/{}.png'.format(uuid), 'PNG')
     return uuid
 
 
 def get_image_as_b64(uuid, filetype='png'):
-    '''Gets b64 image by uuid
+    '''Gets b64 image string by uuid
 
     :param uuid: uuid of image
+    :param filetype: file type to output, options are jpeg, png, or gif
     :return: b64 string of image
     '''
 

@@ -1,17 +1,20 @@
 import requests
 import base64
 
-test_img = 'exampleImages/tower.jpg'
+baseURL = 'http://localhost:5000/'
+
+test_img = 'exampleImages/test.jpg'
+filetype = 'jpeg'
+
 un = 'test@mail.com'
 pw = '12345'
-baseURL = 'http://localhost:5000/'
 
 
 def main():
     headers = login(un, pw)
-    upload(headers, un, test_img)
-    process(headers, un)
-    download(headers, un, 'jpeg')
+    print(upload(headers, un, test_img))
+    print(process(headers, un))
+    download(headers, un, filetype)
 
 
 def read_image(path):
@@ -40,7 +43,7 @@ def upload(headers, username, test_img):
         'file': 'data:image/png;base64,' + read_image(test_img)
     }
     r = requests.post(baseURL + 'upload', headers=headers, json=body)
-    originalID = r.json()['fileID']
+    return r.json()['fileID']
 
 
 def process(headers, username):
@@ -48,7 +51,7 @@ def process(headers, username):
         'username': username
     }
     r = requests.post(baseURL + 'process', headers=headers, json=body)
-    newID = r.json()['fileID']
+    return r.json()['fileID']
 
 
 def download(headers, username, img_format):
