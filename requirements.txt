@@ -17,3 +17,5 @@ scikit-image
 h5py
 opencv-python
 matplotlib
+
+requests
