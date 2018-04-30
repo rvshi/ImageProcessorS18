@@ -5,6 +5,7 @@ from mimetypes import guess_extension
 from uuid import uuid4
 import re
 import os
+from io import BytesIO
 
 
 def save_image(img_str):
@@ -14,14 +15,24 @@ def save_image(img_str):
     :return uuid: UUID4 of image'''
 
     uuid = uuid4().hex
-    matches = re.match(img_str, 'data:(.*);.*?, (.*)')
-    extension = guess_extension(matches[1])
-    img = matches[2]
-    filename = 'images/{}.{}'.format(uuid, extension)
-    file = open(filename, 'wb')
-    file.write(base64.b64decode(img))
-    file.close()
-    return uuid
+    str_parts = img_str.split(',')
+
+    if(len(str_parts) == 2):
+        img_type = str_parts[0]
+        img_raw = str_parts[1]
+
+        try:
+            extension = re.search('data:image/(.+);', img_type).group(1)
+        except AttributeError:  # no match found
+            return None
+
+        filename = 'images/{}.{}'.format(uuid, extension)
+        file = open(filename, 'wb')
+        file.write(base64.b64decode(img_raw))
+        file.close()
+        return uuid
+
+    return None
 
 
 def get_image_by_uuid(uuid):
@@ -35,15 +46,16 @@ def get_image_by_uuid(uuid):
 
     for f in os.listdir('images/'):
         if re.match(uuid, f):
-            im = Image.open(f)
-            im_arr = np.asArray(im)
+            im = Image.open('images/' + f)
+            im = im.convert('L')
+            im_arr = np.asarray(im)
             return im_arr
 
     return None
 
 
 def save_image_from_arr(img_arr):
-    '''Converts uint array to png file
+    '''Converts uint array to png file (intermediary format stored on server)
 
     :param img_arr: uint array
     :return uuid: uuid of converted image'''
@@ -61,15 +73,21 @@ def get_image_as_b64(uuid, filetype='png'):
     :return: b64 string of image
     '''
 
-    extension = None
+    filetype = filetype.lower()
+    img_format = None
     if filetype == 'png':
-        extension = 'png'
-    elif filetype == 'jpeg':
-        extension = 'jpg'
+        img_format = 'PNG'
+    elif filetype == 'jpeg' or filetype == 'jpg':
+        img_format = 'JPEG'
+    elif filetype == 'gif':
+        img_format = 'GIF'
+    else:
+        return None  # error, incorrect file type
 
-    filename = 'images/{}.{}'.format(uuid, extension)
-    with open(filename, 'rb') as f:
-        img_str = base64.b64encode(f.read())
-        return img_str
-
-    return None
+    # convert file to desired type
+    output = BytesIO()
+    image = Image.open('images/{}.png'.format(uuid))
+    image.save(output, format=img_format)
+    contents = base64.b64encode(output.getvalue()).decode()
+    output.close()
+    return contents

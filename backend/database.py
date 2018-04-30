@@ -1,3 +1,4 @@
+import os
 from pymodm import fields, MongoModel, connect
 from pymodm.errors import DoesNotExist
 from passlib.hash import pbkdf2_sha256
@@ -53,6 +54,7 @@ def save_orig_image_uuid(username, uuid):
     try:
         user = User.objects.raw({'_id': username}).first()
         user.orig_image = uuid
+        user.save()
     except DoesNotExist:
         return None
 
@@ -60,7 +62,8 @@ def save_orig_image_uuid(username, uuid):
 def save_current_image_uuid(username, uuid):
     try:
         user = User.objects.raw({'_id': username}).first()
-        user.current_image = uuid
+        user.curr_image = uuid
+        user.save()
     except DoesNotExist:
         return None
 
@@ -76,7 +79,25 @@ def get_orig_image(username):
 def get_current_image(username):
     try:
         user = User.objects.raw({'_id': username}).first()
-        return user.image
+        return user.curr_image
     except DoesNotExist:
-        pass
-    return user.current_image
+        return None
+
+
+def delete_image(name):
+    for f in os.listdir('images/'):
+        if f.startswith(name):
+            os.remove('images/' + f)
+            return
+
+
+def remove_images(username):
+    try:
+        user = User.objects.raw({'_id': username}).first()
+        if user.orig_image is not None:
+            delete_image(user.orig_image)
+        if user.curr_image is not None:
+            delete_image(user.curr_image)
+        return True
+    except DoesNotExist:
+        return False

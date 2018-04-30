@@ -33,18 +33,9 @@ upload_format = {
 process_format = {
     'type': 'object',
     'properties': {
-        'username': email_type,
-        'fileID': {
-            'type': 'string'
-        },
-        'options': {
-            "type": "array",
-            "items": {
-                "type": "string"
-            }
-        }
+        'username': email_type
     },
-    'required': ['username', 'fileID', 'options'],
+    'required': ['username'],
     'additionalProperties': False
 }
 
@@ -52,11 +43,11 @@ download_format = {
     'type': 'object',
     'properties': {
         'username': email_type,
-        'fileID': {
+        'filetype': {
             'type': 'string'
         }
     },
-    'required': ['username', 'fileID'],
+    'required': ['username', 'filetype'],
     'additionalProperties': False
 }
 
