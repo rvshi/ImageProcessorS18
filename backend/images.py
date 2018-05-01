@@ -89,6 +89,13 @@ def get_image_as_b64(uuid, filetype='png'):
         if f.startswith(uuid):
             output = BytesIO()
             image = Image.open('images/' + f.format(uuid))
+
+            # handle transparent images
+            if image.mode in ('RGBA', 'LA'):
+                background = Image.new(image.mode[:-1], image.size, '#fff')
+                background.paste(image, image.split()[-1])
+                image = background
+
             image.save(output, format=img_format)
             contents = base64.b64encode(output.getvalue()).decode()
             output.close()
