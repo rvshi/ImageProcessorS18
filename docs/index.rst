@@ -15,6 +15,7 @@ Welcome to ImageProcessorS18's documentation!
    images
    main
    segment
+   validate
 
 
 Indices and tables

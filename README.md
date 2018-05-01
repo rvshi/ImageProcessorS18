@@ -1,6 +1,7 @@
 # Image Processing Web Service
 
-[![Build Status](https://travis-ci.org/rvshi/ImageProcessorS18.svg?branch=master)](https://travis-ci.org/rvshi/ImageProcessorS18) [![Documentation Status](https://readthedocs.org/projects/imageprocessors18-meh/badge/?version=latest)](http://imageprocessors18-meh.readthedocs.io/en/latest/?badge=latest)
+[![Build Status](https://travis-ci.org/rvshi/ImageProcessorS18.svg?branch=master)](https://travis-ci.org/rvshi/ImageProcessorS18) [![Documentation Status](https://readthedocs.org/projects/imageprocessors18/badge/?version=latest)](http://imageprocessors18.readthedocs.io/en/latest/?badge=latest)
+
 
 
 
