@@ -17,8 +17,8 @@ def segment(uuid):
     hist, bins_center = exposure.histogram(uintfile)
     binary_img = uintfile >= val
     struct = ndimage.morphology.generate_binary_structure(3, 3)
-    open_img = ndimage.binary_opening(binary_img, struct)  # remove small white regions
-    close_img = ndimage.binary_closing(open_img, struct)  # remove small black regions
+    open_img = ndimage.binary_opening(binary_img, struct)
+    close_img = ndimage.binary_closing(open_img, struct)
     new_image = uint8(close_img * 255)
     new_uuid = save_image_from_arr(new_image)
     return new_uuid
