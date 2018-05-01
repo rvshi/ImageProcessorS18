@@ -9,3 +9,4 @@ backend
    images
    main
    segment
+   validate
