@@ -9,10 +9,11 @@ from io import BytesIO
 
 
 def save_image(img_str):
-    '''Converts image string to binary and saves onto drive
+    """Converts image string to binary and saves onto drive
 
-    :param img_str: base64 image string
-    :return uuid: UUID4 of image'''
+        :param img_str: base64 image string
+        :returns uuid of image
+    """
 
     uuid = uuid4().hex
     str_parts = img_str.split(',')
@@ -34,10 +35,11 @@ def save_image(img_str):
 
 
 def save_image_from_arr(img_arr):
-    '''Converts uint array to png file (intermediary format stored on server)
+    """Converts uint array to png file (intermediary format stored on server)
 
-    :param img_arr: uint array
-    :return uuid: uuid of converted image'''
+        :param img_arr: uint array of image
+        :returns uuid of image
+    """
 
     uuid = uuid4().hex
     img = Image.fromarray(img_arr)
@@ -46,13 +48,11 @@ def save_image_from_arr(img_arr):
 
 
 def get_image_by_uuid(uuid):
-    '''Converts image base64 string to uint array, saves intermediate image
-    file to server
+    """Retrieves uint array of image by its uuid
 
-    :param img_str: base64 image string
-    :param uuid: UUID of image to save
-    :return data: grayscale image array
-    '''
+        :param uuid: UUID of image as string
+        :returns: grayscale image array
+    """
 
     for f in os.listdir('images/'):
         if re.match(uuid, f):
@@ -65,12 +65,12 @@ def get_image_by_uuid(uuid):
 
 
 def get_image_as_b64(uuid, filetype='png'):
-    '''Gets b64 image string by uuid
+    """Gets b64 image string by uuid
 
-    :param uuid: uuid of image
-    :param filetype: file type to output, options are jpeg, png, or gif
-    :return: b64 string of image
-    '''
+        :param uuid: uuid of image
+        :param filetype: file type to output, options are jpeg, png, or gif
+        :returns: b64 string of image
+    """
 
     filetype = filetype.lower()
     img_format = None

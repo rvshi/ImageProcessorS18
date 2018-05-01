@@ -14,10 +14,11 @@ from database import(login_user,
 from images import save_image, get_image_by_uuid, get_image_as_b64
 
 
-def act_login(req):
+def act_login(request):
     """Authenticates login with email and password
 
-    : param req: json request from client
+        :param request: json request from client
+        :returns: json of jwt
     """
     params = request.get_json()
     username = params.get('username', None)
@@ -34,7 +35,8 @@ def act_login(req):
 def act_list(username):
     """Lists the original and processed images for a user
 
-    :param username: client username
+        :param username: client username
+        :returns: json including uuid's of original and processed images
     """
     return(jsonify({
         'originalID': get_original_image(username),
@@ -42,10 +44,11 @@ def act_list(username):
     }), 200)
 
 
-def act_upload(req):
+def act_upload(request):
     """Uploads original user image
 
-    :param req: request from client
+        :param request: request from client
+        :returns: uuid of uploaded image
     """
     params = request.get_json()
     username = params.get('username', None)
@@ -60,10 +63,11 @@ def act_upload(req):
     return (jsonify({'fileID': uuid}), 200)
 
 
-def act_process(req):
+def act_process(request):
     """Processes the original image that has been uploaded
 
-    :param req: request from client
+        :param request: request from client
+        :returns: uuid of processed image
     """
 
     username = request.get_json().get('username', None)
@@ -76,11 +80,12 @@ def act_process(req):
     return (jsonify({'fileID': newUuid}), 200)
 
 
-def act_download(req):
-    '''Handles download request for images
+def act_download(request):
+    """Handles download request for images
 
-    :param req: json request from client
-    '''
+        :param request: json request from client
+        :returns: b64 image string of processed image
+    """
     params = request.get_json()
     fileID = params.get('fileID', None)
     filetype = params.get('filetype', None)
