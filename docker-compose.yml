@@ -1,0 +1,27 @@
+version: '3'
+services:
+  db:
+    restart: always
+    image: mongo
+    expose:
+    - "27017"
+    volumes:
+    - $PWD/db:/data/db
+  start_dependencies:
+      restart: always
+      image: dadarek/wait-for-dependencies
+      command: db:27017
+      depends_on:
+      - db
+  backend:
+    restart: always
+    build: .
+    command: gunicorn --bind 0.0.0.0:5000 --workers 4 main:app
+    links:
+      - db:mongo
+    ports:
+    - 5000:5000
+    volumes:
+    - $PWD/backend:/code
+    depends_on:
+      - start_dependencies

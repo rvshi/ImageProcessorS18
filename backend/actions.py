@@ -1,4 +1,3 @@
-from flask import jsonify
 from flask import jsonify, request
 from flask_jwt_simple import create_jwt
 
@@ -20,9 +19,8 @@ def act_login(request):
         :param request: json request from client
         :returns: json of jwt
     """
-    params = request.get_json()
-    username = params.get('username', None)
-    password = params.get('password', None)
+    username = request.get('username', None)
+    password = request.get('password', None)
 
     # check if user exists and the password is correct
     if login_user(username, password):
@@ -50,9 +48,9 @@ def act_upload(request):
         :param request: request from client
         :returns: uuid of uploaded image
     """
-    params = request.get_json()
-    username = params.get('username', None)
-    file = params.get('file', None)
+
+    username = request.get('username', None)
+    file = request.get('file', None)
 
     uuid = save_image(file)
     if uuid is None:
@@ -70,7 +68,7 @@ def act_process(request):
         :returns: uuid of processed image
     """
 
-    username = request.get_json().get('username', None)
+    username = request.get('username', None)
 
     uuid = get_original_image(username)
     if uuid is None:
@@ -86,9 +84,9 @@ def act_download(request):
         :param request: json request from client
         :returns: b64 image string of processed image
     """
-    params = request.get_json()
-    fileID = params.get('fileID', None)
-    filetype = params.get('filetype', None)
+
+    fileID = request.get('fileID', None)
+    filetype = request.get('filetype', None)
 
     if fileID is None:
         return (jsonify({'error': 'Processed image not found'}), 400)
