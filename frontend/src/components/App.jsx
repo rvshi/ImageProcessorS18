@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { req, validate } from '../requests';
+import { get, post } from '../requests';
 import Login from './Login';
 import Dashboard from './Dashboard';
 import Notifications from './Notifications';
@@ -9,7 +9,7 @@ const defaultState = {
   password: '',
   jwt: null,
   loggedIn: false,
-  images: null
+  images: {}
 };
 class App extends Component {
   constructor(props) {
@@ -23,7 +23,7 @@ class App extends Component {
     let username = '';
 
     if (jwt !== 'null' && jwt !== 'undefined') {
-      validate(jwt, (res, success) => {
+      get(jwt, 'validate', (res, success) => {
         if (success) {
           loggedIn = true;
           username = res.data.username;
@@ -33,6 +33,18 @@ class App extends Component {
         this.setState({ jwt, username, loggedIn });
       });
     }
+  }
+
+  // list items
+  list = (cb) => {
+    const { jwt, images } = this.state;
+    get(jwt, 'list', (res, success) => {
+      if (success) {
+        const data = res.data;
+        this.setState({ images: { ...images, ...data } });
+        cb(data);
+      }
+    });
   }
 
   update = (key, val, cb) => {
@@ -54,14 +66,11 @@ class App extends Component {
     localStorage.setItem('jwt', 'undefined'); // remove jwt
   }
 
-
-
-  request = (path, options) => {
-
+  request = (path, options, cb) => {
     const { jwt, username, password, images } = this.state;
 
     if (path === 'login') {
-      req(null, path, { username, password }, (res, success) => {
+      post(null, path, { username, password }, (res, success) => {
         if (success) {
           const jwt = res.data.jwt;
           localStorage.setItem('jwt', jwt);
@@ -72,31 +81,42 @@ class App extends Component {
         }
       });
     } else if (path === 'upload' && images && images.original) {
-      req(jwt, path, { username, file: images.original }, (res, success) => {
+      post(jwt, path, { username, file: images.original }, (res, success) => {
         if (success) {
           const originalID = res.data.fileID;
           this.setState({ images: { ...images, originalID } });
           this.notify(`Image uploaded`, 'good');
+          this.request('process');
         } else {
           this.notify('Error uploading image.', 'bad');
         }
       });
     } else if (path === 'process') {
-      req(jwt, path, { username }, (res, success) => {
+      post(jwt, path, { username }, (res, success) => {
         if (success) {
-          const processed = res.data.file;
-          this.setState({ images: { ...images, processed } });
+          const processedID = res.data.fileID;
+          this.setState({ images: { ...images, processedID } });
           this.notify(`Image processed`, 'good');
+          this.request('download', { which: 'processed', fileID: processedID, filetype: 'jpeg' });
         } else {
           this.notify('Error processing image.', 'bad');
         }
       });
     } else if (path === 'download' && options) {
-      req(jwt, path, { username, filetype: options }, (res, success) => {
+      const { which, fileID, filetype } = options;
+      post(jwt, path, { username, fileID, filetype }, (res, success) => {
         if (success) {
-          const originalID = res.data.fileID;
-          this.setState({ images: { ...images, originalID } });
-          this.notify(`Image downloaded`, 'good');
+          const imgFile = `data:image/${filetype};base64,${res.data.file}`
+          if (cb) {
+            cb(imgFile);
+          } else {
+            this.setState({
+              images:
+                Object.assign({}, this.state.images, {
+                  [which]: imgFile
+                })
+            });
+          }
         } else {
           this.notify('Error downloading image.', 'bad');
         }
@@ -109,7 +129,7 @@ class App extends Component {
     return (
       <div className="App">
         {loggedIn ?
-          <Dashboard update={this.update} request={this.request} logout={this.logout} username={username} images={images} />
+          <Dashboard update={this.update} request={this.request} logout={this.logout} username={username} images={images} list={this.list} />
           : <Login update={this.update} request={this.request} username={username} password={password} />
         }
         {notification && <Notifications notification={notification} />}

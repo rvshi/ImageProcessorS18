@@ -9,6 +9,11 @@ html {
   background-size: 120% 120%;
 }
 
+body {
+  margin: 0;
+  padding: 0;
+}
+
 @-webkit-keyframes AnimationName {
   0% {
     background-position: 0% 50%

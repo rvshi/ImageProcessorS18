@@ -1,9 +1,8 @@
 import axios from 'axios';
 
-let baseURL = 'https://vcm-4141.vm.duke.edu';
-baseURL = 'http://localhost:5000';
+const baseURL = 'https://vcm-4141.vm.duke.edu';
 
-export const req = (jwt, path, body, cb) => {
+export const post = (jwt, path, body, cb) => {
   if (jwt) {
     axios.defaults.headers.common['Authorization'] = 'Bearer ' + jwt;
   }
@@ -16,10 +15,9 @@ export const req = (jwt, path, body, cb) => {
       });
 };
 
-
-export const validate = (jwt, cb) => {
+export const get = (jwt, path, cb) => {
   axios.defaults.headers.common['Authorization'] = 'Bearer ' + jwt;
-  axios.get(baseURL + '/validate')
+  axios.get(baseURL + '/' + path)
       .then((response) => {
         cb(response, true);
       })
