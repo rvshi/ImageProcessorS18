@@ -17,10 +17,10 @@ CORS(app)
 def handler(input, validator, action):
     """Handles API endpoints
 
-    :param input: input data from request
-    :param validator: validator function to use
-    :param action: database function to apply to data
-    :return: jsonified response
+        :param input: input data from request
+        :param validator: validator function to use
+        :param action: database function to apply to data
+        :return: jsonified response
     """
 
     if not request.is_json:
