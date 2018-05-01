@@ -6,10 +6,11 @@ from images import get_image_by_uuid, save_image_from_arr
 
 
 def segment(uuid):
-    """Segments image with input uuid, saves processed image to server and returns its uuid
+    """Segments image with input uuid, saves processed image to server
+    and returns its uuid
 
        :param uuid: uuid of original image
-       :returns: uuid of processed image and saves the b64 string of image on server
+       :returns: uuid of processed image, saves b64 string of image on server
     """
     uintfile = get_image_by_uuid(uuid)
     val = filters.threshold_otsu(uintfile)

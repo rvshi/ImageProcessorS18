@@ -1,7 +1,7 @@
 import base64
 import numpy as np
 from PIL import Image
-from mimetypes import guess_extension
+# from mimetypes import guess_extension
 from uuid import uuid4
 import re
 import os
@@ -12,9 +12,8 @@ def save_image(img_str):
     """Converts image string to binary and saves onto drive
 
         :param img_str: base64 image string
-        :returns uuid of image
+        :returns: uuid of image
     """
-
     uuid = uuid4().hex
     str_parts = img_str.split(',')
 
@@ -38,9 +37,8 @@ def save_image_from_arr(img_arr):
     """Converts uint array to png file (intermediary format stored on server)
 
         :param img_arr: uint array of image
-        :returns uuid of image
+        :returns: uuid of image
     """
-
     uuid = uuid4().hex
     img = Image.fromarray(img_arr)
     img.save('images/{}.png'.format(uuid), 'PNG')
@@ -53,7 +51,6 @@ def get_image_by_uuid(uuid):
         :param uuid: UUID of image as string
         :returns: grayscale image array
     """
-
     for f in os.listdir('images/'):
         if re.match(uuid, f):
             im = Image.open('images/' + f)
