@@ -3,7 +3,7 @@ from pymodm import fields, MongoModel, connect
 from pymodm.errors import DoesNotExist
 from passlib.hash import pbkdf2_sha256
 
-connect("mongodb://localhost:27017/database")
+connect("mongodb://mongo:27017/database")
 
 
 class User(MongoModel):
