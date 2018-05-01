@@ -56,7 +56,7 @@ def login_user(username, password):
     """Returns true if user exists and has the correct password
         :param username: user email as string type which serves as user id
         :param password: user password as string type
-        :returns: True if user has correct password, False if incorrect password
+        :returns: True if password is correct, False if incorrect
     """
     try:
         user = User.objects.raw({'_id': username}).first()
