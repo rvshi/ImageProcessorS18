@@ -1,6 +1,7 @@
 # Image Processing Web Service
 
-[![Build Status](https://travis-ci.org/rvshi/ImageProcessorS18.svg?branch=master)](https://travis-ci.org/rvshi/ImageProcessorS18)
+[![Build Status](https://travis-ci.org/rvshi/ImageProcessorS18.svg?branch=master)](https://travis-ci.org/rvshi/ImageProcessorS18) [![Documentation Status](https://readthedocs.org/projects/image-processor-s18/badge/?version=latest)](http://image-processor-s18.readthedocs.io/en/latest/?badge=latest)
+
 
 __Team:__ 59ers
 
