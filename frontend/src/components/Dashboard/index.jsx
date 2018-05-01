@@ -67,7 +67,6 @@ class Dashboard extends Component {
         })
       };
 
-    console.log(images)
     return (
       <div className="Dashboard">
         <Menubar logout={logout} username={username} />
