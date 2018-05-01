@@ -16,8 +16,9 @@ def segment(uuid):
     val = filters.threshold_otsu(uintfile)
     hist, bins_center = exposure.histogram(uintfile)
     binary_img = uintfile >= val
-    open_img = ndimage.binary_opening(binary_img)  # remove small white regions
-    close_img = ndimage.binary_closing(open_img)  # remove small black regions
+    struct = ndimage.morphology.generate_binary_structure(3, 3)
+    open_img = ndimage.binary_opening(binary_img, struct)
+    close_img = ndimage.binary_closing(open_img, struct)
     new_image = uint8(close_img * 255)
     new_uuid = save_image_from_arr(new_image)
     return new_uuid
