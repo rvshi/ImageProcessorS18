@@ -64,6 +64,7 @@ class App extends Component {
   logout = () => {
     this.setState(defaultState);
     localStorage.setItem('jwt', 'undefined'); // remove jwt
+    this.notify('Logged out successfully', 'good');
   }
 
   request = (path, options, cb) => {

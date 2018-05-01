@@ -5,6 +5,6 @@ const style = {
   verticalAlign: 'middle',
 }
 
-const Icon = ({ name }) => <span style={style} class="material-icons">{name}</span>;
+const Icon = ({ name }) => <span style={style} className="material-icons">{name}</span>;
 
 export default Icon;
