@@ -81,12 +81,13 @@ class App extends Component {
           this.notify('Username or password are incorrect.', 'bad');
         }
       });
-    } else if (path === 'upload' && images && images.original) {
-      post(jwt, path, { username, file: images.original }, (res, success) => {
+    } else if (path === 'upload' && options) {
+      const { original } = options;
+      post(jwt, path, { username, file: original }, (res, success) => {
         if (success) {
           const originalID = res.data.fileID;
-          this.setState({ images: { ...images, originalID } });
-          this.notify(`Image uploaded`, 'good');
+          this.setState({ images: { ...images, original, originalID } });
+          this.notify('Image uploaded', 'good');
           this.request('process');
         } else {
           this.notify('Error uploading image.', 'bad');
@@ -107,14 +108,25 @@ class App extends Component {
       const { which, fileID, filetype } = options;
       post(jwt, path, { username, fileID, filetype }, (res, success) => {
         if (success) {
-          const imgFile = `data:image/${filetype};base64,${res.data.file}`
-          if (cb) {
-            cb(imgFile);
-          } else {
+          const file = res.data.file;
+          if (file) {
+            const imgFile = `data:image/${filetype};base64,${file}`
+            if (cb) {
+              cb(imgFile);
+            } else {
+              this.setState({
+                images:
+                  Object.assign({}, this.state.images, {
+                    [which]: imgFile
+                  })
+              });
+            }
+          } else { // handle case where images are deleted from server
             this.setState({
               images:
                 Object.assign({}, this.state.images, {
-                  [which]: imgFile
+                  [which]: null,
+                  [which + 'ID']: null
                 })
             });
           }

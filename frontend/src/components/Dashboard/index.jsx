@@ -43,29 +43,26 @@ class Dashboard extends Component {
 
       const reader = new FileReader();
       reader.readAsDataURL(file);
-      reader.onload = () => this.props.update('images', {
-        ...this.props.images,
-        original: reader.result
-      }, () => this.props.request('upload'));
+      reader.onload = () => this.props.request('upload', { original: reader.result })
     }
   }
 
   render() {
-    const { request, logout, username, images } = this.props,
-      req = {
-        process: () => request('process'),
-        download: (which, type) => request('download', {
-          which,
-          fileID: images.processedID,
-          filetype: type
-        }, (file) => {
-          const uploader = this.refs.imageDownloader;
-          const fileName = `${images.processedID}.${type}`;
-          uploader.setAttribute("href", file);
-          uploader.setAttribute("download", fileName);
-          uploader.click();
-        })
-      };
+    const { request, logout, username, images } = this.props;
+    const req = {
+      process: () => request('process'),
+      download: (which, type) => request('download', {
+        which,
+        fileID: images.processedID,
+        filetype: type
+      }, (file) => {
+        const uploader = this.refs.imageDownloader;
+        const fileName = `${images.processedID}.${type}`;
+        uploader.setAttribute("href", file);
+        uploader.setAttribute("download", fileName);
+        uploader.click();
+      })
+    };
 
     return (
       <div className="Dashboard">
