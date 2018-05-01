@@ -22,7 +22,6 @@ def handler(input, validator, action):
         :param action: database function to apply to data
         :return: jsonified response
     """
-
     if not request.is_json:
         return jsonify({"error": "JSON missing"}), 400
     elif(not validator(input)):
