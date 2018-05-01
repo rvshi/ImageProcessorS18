@@ -33,18 +33,9 @@ upload_format = {
 process_format = {
     'type': 'object',
     'properties': {
-        'username': email_type,
-        'fileID': {
-            'type': 'string'
-        },
-        'options': {
-            "type": "array",
-            "items": {
-                "type": "string"
-            }
-        }
+        'username': email_type
     },
-    'required': ['username', 'fileID', 'options'],
+    'required': ['username'],
     'additionalProperties': False
 }
 
@@ -54,40 +45,35 @@ download_format = {
         'username': email_type,
         'fileID': {
             'type': 'string'
+        },
+        'filetype': {
+            'type': 'string'
         }
     },
-    'required': ['username', 'fileID'],
+    'required': ['username', 'fileID', 'filetype'],
     'additionalProperties': False
 }
 
 
-def val_login(input):
+def val_wrapper(input, schema_format):
     try:
-        validate(input, login_format)
+        validate(input, schema_format)
         return True
     except ValidationError:
         return False
+
+
+def val_login(input):
+    return val_wrapper(input, login_format)
 
 
 def val_upload(input):
-    try:
-        validate(input, upload_format)
-        return True
-    except ValidationError:
-        return False
+    return val_wrapper(input, upload_format)
 
 
 def val_process(input):
-    try:
-        validate(input, process_format)
-        return True
-    except (ValueError, ValidationError):
-        return False
+    return val_wrapper(input, process_format)
 
 
 def val_download(input):
-    try:
-        validate(input, download_format)
-        return True
-    except ValidationError:
-        return False
+    return val_wrapper(input, download_format)

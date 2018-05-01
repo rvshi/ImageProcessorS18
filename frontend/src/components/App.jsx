@@ -1,17 +1,15 @@
 import React, { Component } from 'react';
-import { req, validate } from '../requests';
+import { get, post } from '../requests';
 import Login from './Login';
 import Dashboard from './Dashboard';
 import Notifications from './Notifications';
 
-const MAX_FILE_SIZE = 1024 * 1024 * 4;
-const SUPPORTED_FILE_TYPES = ['image/jpeg', 'image/png'];
 const defaultState = {
   username: '',
   password: '',
   jwt: null,
   loggedIn: false,
-  images: null
+  images: {}
 };
 class App extends Component {
   constructor(props) {
@@ -25,7 +23,7 @@ class App extends Component {
     let username = '';
 
     if (jwt !== 'null' && jwt !== 'undefined') {
-      validate(jwt, (res, success) => {
+      get(jwt, 'validate', (res, success) => {
         if (success) {
           loggedIn = true;
           username = res.data.username;
@@ -37,8 +35,24 @@ class App extends Component {
     }
   }
 
-  update = (key, val) => {
-    this.setState({ [key]: val });
+  // list items
+  list = (cb) => {
+    const { jwt, images } = this.state;
+    get(jwt, 'list', (res, success) => {
+      if (success) {
+        const data = res.data;
+        this.setState({ images: { ...images, ...data } });
+        cb(data);
+      }
+    });
+  }
+
+  update = (key, val, cb) => {
+    if (cb) {
+      this.setState({ [key]: val }, () => cb());
+    } else {
+      this.setState({ [key]: val });
+    }
   }
 
   notify = (message, type) => {
@@ -50,41 +64,14 @@ class App extends Component {
   logout = () => {
     this.setState(defaultState);
     localStorage.setItem('jwt', 'undefined'); // remove jwt
+    this.notify('Logged out successfully', 'good');
   }
 
-  upload = () => {
-    this.refs.imageUploader.click();
-  }
+  request = (path, options, cb) => {
+    const { jwt, username, password, images } = this.state;
 
-  handleFile = (files) => {
-
-    // validate file
-    if (files.length === 1) {
-      let file = files[0];
-      if (file.size > MAX_FILE_SIZE) {
-        this.notify('File is larger than 4MB', 'bad');
-        return;
-      } else if (!SUPPORTED_FILE_TYPES.includes(file.type)) {
-        this.notify('File must be JPEG or PNG', 'bad');
-        return;
-      }
-
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => {
-        this.setState({
-          images: {
-            original: reader.result
-          }
-        });
-      };
-    }
-  }
-
-  request = (path) => {
-    const { username, password } = this.state;
     if (path === 'login') {
-      req(null, path, { username, password }, (res, success) => {
+      post(null, path, { username, password }, (res, success) => {
         if (success) {
           const jwt = res.data.jwt;
           localStorage.setItem('jwt', jwt);
@@ -92,6 +79,47 @@ class App extends Component {
           this.notify(`Welcome back ${username}!`, 'good');
         } else {
           this.notify('Username or password are incorrect.', 'bad');
+        }
+      });
+    } else if (path === 'upload' && images && images.original) {
+      post(jwt, path, { username, file: images.original }, (res, success) => {
+        if (success) {
+          const originalID = res.data.fileID;
+          this.setState({ images: { ...images, originalID } });
+          this.notify(`Image uploaded`, 'good');
+          this.request('process');
+        } else {
+          this.notify('Error uploading image.', 'bad');
+        }
+      });
+    } else if (path === 'process') {
+      post(jwt, path, { username }, (res, success) => {
+        if (success) {
+          const processedID = res.data.fileID;
+          this.setState({ images: { ...images, processedID } });
+          this.notify(`Image processed`, 'good');
+          this.request('download', { which: 'processed', fileID: processedID, filetype: 'jpeg' });
+        } else {
+          this.notify('Error processing image.', 'bad');
+        }
+      });
+    } else if (path === 'download' && options) {
+      const { which, fileID, filetype } = options;
+      post(jwt, path, { username, fileID, filetype }, (res, success) => {
+        if (success) {
+          const imgFile = `data:image/${filetype};base64,${res.data.file}`
+          if (cb) {
+            cb(imgFile);
+          } else {
+            this.setState({
+              images:
+                Object.assign({}, this.state.images, {
+                  [which]: imgFile
+                })
+            });
+          }
+        } else {
+          this.notify('Error downloading image.', 'bad');
         }
       });
     }
@@ -102,12 +130,10 @@ class App extends Component {
     return (
       <div className="App">
         {loggedIn ?
-          <Dashboard update={this.update} request={this.request} logout={this.logout} username={username} upload={this.upload} images={images} />
+          <Dashboard update={this.update} request={this.request} logout={this.logout} username={username} images={images} list={this.list} />
           : <Login update={this.update} request={this.request} username={username} password={password} />
         }
         {notification && <Notifications notification={notification} />}
-
-        <input type="file" id="file" ref="imageUploader" onChange={(e) => this.handleFile(e.target.files)} style={{ display: "none" }} />
       </div>
     );
   }

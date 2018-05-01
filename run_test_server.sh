@@ -1,3 +1,5 @@
 #!/bin/bash
 cd backend
-gunicorn --bind 0.0.0.0:5000 main:app
+export FLASK_APP=main.py
+export FLASK_DEBUG=1
+../venv/bin/flask run

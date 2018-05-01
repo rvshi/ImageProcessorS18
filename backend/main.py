@@ -4,7 +4,8 @@ from flask_jwt_simple import (
 )
 from flask_cors import CORS
 from validate import val_login, val_upload, val_process, val_download
-from actions import act_login, act_upload, act_process, act_download
+from actions import (act_login, act_list, act_upload,
+                     act_process, act_download)
 from secret_key import SECRET_KEY
 
 app = Flask(__name__)
@@ -32,33 +33,39 @@ def handler(input, validator, action):
 
 
 @app.route('/login', methods=['POST'])
-def login():
+def login_handler():
     r = request.get_json()
     return handler(r, val_login, act_login)
 
 
 @app.route("/validate", methods=["GET"])
 @jwt_required
-def validate():
+def validate_handler():
     return jsonify({"username": get_jwt_identity()}), 200
+
+
+@app.route("/list", methods=["GET"])
+@jwt_required
+def list_handler():
+    return act_list(get_jwt_identity())
 
 
 @app.route("/upload", methods=["POST"])
 @jwt_required
-def upload():
+def upload_handler():
     r = request.get_json()
     return handler(r, val_upload, act_upload)
 
 
 @app.route("/process", methods=["POST"])
 @jwt_required
-def process():
+def process_handler():
     r = request.get_json()
     return handler(r, val_process, act_process)
 
 
 @app.route("/download", methods=["POST"])
 @jwt_required
-def download():
+def download_handler():
     r = request.get_json()
     return handler(r, val_download, act_download)
