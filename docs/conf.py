@@ -4,7 +4,7 @@
 #
 # This file does only contain a selection of the most common options. For a
 # full list see the documentation:
-# http://www.sphinx-doc.org/en/master/config
+# http://www.sphinx-doc.org/en/stable/config
 
 # -- Path setup --------------------------------------------------------------
 
@@ -14,8 +14,7 @@
 #
 import os
 import sys
-sys.path.insert(0, os.path.abspath('../backend/'))
-
+sys.path.insert(0, os.path.abspath('..'))
 
 # -- Project information -----------------------------------------------------
 
