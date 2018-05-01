@@ -1,11 +1,11 @@
-ImageProcessorS18
-=================
+backend
+=======
 
 .. toctree::
    :maxdepth: 4
 
-    actions
-    database
-    images
-    main
-    segment
+   actions
+   database
+   images
+   main
+   segment

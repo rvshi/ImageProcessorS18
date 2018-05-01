@@ -10,11 +10,11 @@ Welcome to ImageProcessorS18's documentation!
    :maxdepth: 2
    :caption: Contents:
 
-    actions
-    database
-    images
-    main
-    segment
+.. automodule::  actions
+.. automodule::  database
+.. automodule::  images
+.. automodule::  main
+.. automodule::  segment
 
 
 
