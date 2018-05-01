@@ -2,7 +2,7 @@ from numpy import uint8
 from skimage import filters
 from skimage import exposure
 import scipy.ndimage as ndimage
-from convert import get_image_by_uuid, save_image_from_arr
+from images import get_image_by_uuid, save_image_from_arr
 
 
 def segment(uuid):

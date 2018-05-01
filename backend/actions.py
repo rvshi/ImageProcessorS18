@@ -8,10 +8,10 @@ from pymodm import connect
 from segment import segment
 from database import(login_user,
                      get_processed_image,
-                     get_original_image,                     save_original_image_uuid,
+                     get_original_image, save_original_image_uuid,
                      save_processed_image_uuid,
                      remove_images)
-from convert import save_image, get_image_by_uuid, get_image_as_b64
+from images import save_image, get_image_by_uuid, get_image_as_b64
 
 
 def act_login(req):
@@ -31,6 +31,17 @@ def act_login(req):
     return jsonify({'error': 'username or password is incorrect'}), 400
 
 
+def act_list(username):
+    """Lists the original and processed images for a user
+
+    :param username: client username
+    """
+    return(jsonify({
+        'originalID': get_original_image(username),
+        'processedID': get_processed_image(username)
+    }), 200)
+
+
 def act_upload(req):
     """Uploads original user image
 
@@ -47,17 +58,6 @@ def act_upload(req):
     remove_images(username)
     save_original_image_uuid(username, uuid)
     return (jsonify({'fileID': uuid}), 200)
-
-
-def act_list(username):
-    """Lists the original and processed images for a user
-
-    :param username: client username
-    """
-    return(jsonify({
-        'originalID': get_original_image(username),
-        'processedID': get_processed_image(username)
-    }), 200)
 
 
 def act_process(req):
@@ -82,11 +82,10 @@ def act_download(req):
     :param req: json request from client
     '''
     params = request.get_json()
-    username = params.get('username', None)
+    fileID = params.get('fileID', None)
     filetype = params.get('filetype', None)
 
-    uuid = get_processed_image(username)
-    if uuid is None:
+    if fileID is None:
         return (jsonify({'error': 'Processed image not found'}), 400)
-    img_str = get_image_as_b64(uuid, filetype=filetype)
+    img_str = get_image_as_b64(fileID, filetype=filetype)
     return (jsonify({'file': img_str}), 200)

@@ -26,11 +26,23 @@ def save_image(img_str):
         except AttributeError:  # no match found
             return None
 
-        with open('images/{}.{}'.format(uuid, extension), 'wb') as f:
+        with open('images/{}.png'.format(uuid, extension), 'wb') as f:
             f.write(base64.b64decode(img_raw))
             return uuid
 
     return None
+
+
+def save_image_from_arr(img_arr):
+    '''Converts uint array to png file (intermediary format stored on server)
+
+    :param img_arr: uint array
+    :return uuid: uuid of converted image'''
+
+    uuid = uuid4().hex
+    img = Image.fromarray(img_arr)
+    img.save('images/{}.png'.format(uuid), 'PNG')
+    return uuid
 
 
 def get_image_by_uuid(uuid):
@@ -50,18 +62,6 @@ def get_image_by_uuid(uuid):
             return im_arr
 
     return None
-
-
-def save_image_from_arr(img_arr):
-    '''Converts uint array to png file (intermediary format stored on server)
-
-    :param img_arr: uint array
-    :return uuid: uuid of converted image'''
-
-    uuid = uuid4().hex
-    img = Image.fromarray(img_arr)
-    img.save('images/{}.png'.format(uuid), 'PNG')
-    return uuid
 
 
 def get_image_as_b64(uuid, filetype='png'):
@@ -84,9 +84,12 @@ def get_image_as_b64(uuid, filetype='png'):
         return None  # error, incorrect file type
 
     # convert file to desired type
-    output = BytesIO()
-    image = Image.open('images/{}.png'.format(uuid))
-    image.save(output, format=img_format)
-    contents = base64.b64encode(output.getvalue()).decode()
-    output.close()
+
+    for f in os.listdir('images/'):
+        if f.startswith(uuid):
+            output = BytesIO()
+            image = Image.open('images/' + f.format(uuid))
+            image.save(output, format=img_format)
+            contents = base64.b64encode(output.getvalue()).decode()
+            output.close()
     return contents
