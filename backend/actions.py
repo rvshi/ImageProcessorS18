@@ -12,6 +12,12 @@ from database import (login_user, get_processed_image, get_original_image,
                       save_original_image_uuid, save_processed_image_uuid,
                       remove_images)
 from images import save_image, get_image_by_uuid, get_image_as_b64
+import logging
+from logging_config import config
+
+
+logging.basicConfig(**config)
+logger = logging.getLogger(__name__)
 
 
 def act_login(request):
@@ -56,11 +62,12 @@ def act_upload(request):
 
     uuid = save_image(file)
     if uuid is None:
-        return (jsonify({'error': 'Error saving image'}), 400)
+        logger.error('No image saved, uuid {0} is invalid'.format(uuid))
+        return jsonify({'error': 'Error saving image'}), 400
 
     remove_images(username)
     save_original_image_uuid(username, uuid)
-    return (jsonify({'fileID': uuid}), 200)
+    return jsonify({'fileID': uuid}), 200
 
 
 def act_process(request):
@@ -74,10 +81,12 @@ def act_process(request):
 
     uuid = get_original_image(username)
     if uuid is None:
-        return (jsonify({'error': 'Original image not found'}), 400)
+        logger.error('No image processed, uuid {0} is invalid'.format(uuid))
+        return jsonify({'error': 'Original image not found'}), 400
     newUuid = segment(uuid)
     save_processed_image_uuid(username, newUuid)
-    return (jsonify({'fileID': newUuid}), 200)
+    logger.debug('New processed image with uuid {0} saved'.format(newUuid))
+    return jsonify({'fileID': newUuid}), 200
 
 
 def act_download(request):
@@ -91,6 +100,10 @@ def act_download(request):
     filetype = request.get('filetype', None)
 
     if fileID is None:
-        return (jsonify({'error': 'Processed image not found'}), 400)
+        logger.error('No image downloaded, uuid {0} is invalid'
+                     .format(fileID))
+        return jsonify({'error': 'Processed image not found'}), 400
     img_str = get_image_as_b64(fileID, filetype=filetype)
-    return (jsonify({'file': img_str}), 200)
+    logger.debug('New image with uuid {0} and filetype {1} downloaded'
+                 .format(fileID, filetype))
+    return jsonify({'file': img_str}), 200

@@ -2,6 +2,12 @@
 
 """
 from jsonschema import validate, ValidationError
+import logging
+from logging_config import config
+
+
+logging.basicConfig(**config)
+logger = logging.getLogger(__name__)
 
 # Regex from http://usernameregex.com
 email_type = {
@@ -66,9 +72,13 @@ def val_wrapper(input, schema_format):
         :returns: validation true or false
     """
     try:
+        logger.debug('Validating {0} as {1}'.format(input, schema_format))
         validate(input, schema_format)
+        logger.debug('Input validated')
         return True
     except ValidationError:
+        logger.error('Input {0} is not validated by {1}'
+                     .format(input, schema_format))
         return False
 
 

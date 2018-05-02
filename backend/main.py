@@ -10,6 +10,12 @@ from validate import val_login, val_upload, val_process, val_download
 from actions import (act_login, act_list, act_upload,
                      act_process, act_download)
 from secret_key import SECRET_KEY
+import logging
+from logging_config import config
+
+
+logging.basicConfig(**config)
+logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
 app.config['JWT_SECRET_KEY'] = SECRET_KEY
@@ -27,10 +33,12 @@ def handler(input, validator, action):
     """
     if not request.is_json:
         return jsonify({"error": "JSON missing"}), 400
-    elif(not validator(input)):
+    elif not validator(input):
         return jsonify({'error': 'Request was incorrectly formatted.'}), 400
     else:
         (response, code) = action(input)
+        logger.debug('Json input: {0}, Validator: {1}, Action: {2}'
+                     .format(input, validator, action))
         return response, code
 
 
