@@ -87,7 +87,8 @@ def download(headers, username, fileID, img_format):
     data = r.json()['file']
     with open('exampleImages/temp.{}'.format(img_format), 'wb') as f:
         f.write(base64.decodebytes(data.encode()))
-    logger.debug('downloaded processed image with uuid: {0}'.format(r.json()['fileID']))
+    logger.debug('downloaded processed image with uuid: {0}'
+                 .format(r.json()['fileID']))
 
 
 if __name__ == '__main__':

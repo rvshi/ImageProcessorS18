@@ -75,7 +75,8 @@ def login_user(username, password):
     try:
         user = User.objects.raw({'_id': username}).first()
         if user.password and pbkdf2_sha256.verify(password, user.password):
-            logger.info('Correct username and password. Successful user login')
+            logger.info('Correct username and password. '
+                        'Successful user login')
             return True
     except DoesNotExist:
         logger.warning('User does not exist')

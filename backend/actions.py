@@ -100,9 +100,10 @@ def act_download(request):
     filetype = request.get('filetype', None)
 
     if fileID is None:
-        logger.error('No image downloaded, uuid {0} is invalid'.format(fileID))
+        logger.error('No image downloaded, uuid {0} is invalid'
+                     .format(fileID))
         return jsonify({'error': 'Processed image not found'}), 400
     img_str = get_image_as_b64(fileID, filetype=filetype)
     logger.debug('New image with uuid {0} and filetype {1} downloaded'
-                 .format(fileID,filetype))
+                 .format(fileID, filetype))
     return jsonify({'file': img_str}), 200

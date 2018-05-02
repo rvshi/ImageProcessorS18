@@ -38,7 +38,7 @@ def handler(input, validator, action):
     else:
         (response, code) = action(input)
         logger.debug('Json input: {0}, Validator: {1}, Action: {2}'
-                     .format(input,validator, action))
+                     .format(input, validator, action))
         return response, code
 
 
