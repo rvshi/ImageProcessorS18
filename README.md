@@ -9,9 +9,13 @@ __Team Members:__ Harvey Shi (@rvshi), Edward Liang (@edl11), Michelle Wei (@mic
 
 __Course:__ Duke BME 590-05 Medical Software Design (Spring 2018)
 
+__Try It Here:__ https://harveyshi.com/ImageProcessorS18/
 
-<img src="screenshots/login.png" width="85%" /> 
-<img src="screenshots/dashboard.png" width="85%" /> 
+__See A Demo:__ https://youtu.be/1ffBEW7qsT0
+
+
+<img src="screenshots/login.png" width="85%" />
+<img src="screenshots/dashboard.png" width="85%" />
 
 ## Introduction
 
