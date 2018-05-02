@@ -17,7 +17,7 @@ login_format = {
             'type': 'string'
         },
     },
-    'required': ['username'],
+    'required': ['username', 'password'],
     'additionalProperties': False
 }
 

@@ -18,22 +18,42 @@ def save_image(img_str):
         :returns: uuid of image
     """
     uuid = uuid4().hex
+
+    try:
+        img_type, img_raw = split_img_str(img_str)
+    except ValueError:
+        return None
+
+    try:
+        extension = re.search('data:image/(.+);', img_type).group(1)
+    except AttributeError:  # no match found
+        return None
+
+    with open('images/{}.png'.format(uuid, extension), 'wb') as f:
+        print(img_raw)
+        f.write(base64.b64decode(img_raw))
+        return uuid
+
+    return None
+
+
+def split_img_str(img_str):
+    '''Splits image string from frontend into metadata and b64 binary
+
+    :param img_str: raw string from frontend
+    :returns: tuple of image type and binary
+    '''
+
     str_parts = img_str.split(',')
 
     if(len(str_parts) == 2):
         img_type = str_parts[0]
         img_raw = str_parts[1]
+    else:
+        raise ValueError('''Invalid image string input. String must contain both
+                         metadata and base64 binary string''')
 
-        try:
-            extension = re.search('data:image/(.+);', img_type).group(1)
-        except AttributeError:  # no match found
-            return None
-
-        with open('images/{}.png'.format(uuid, extension), 'wb') as f:
-            f.write(base64.b64decode(img_raw))
-            return uuid
-
-    return None
+    return (img_type, img_raw)
 
 
 def save_image_from_arr(img_arr):
@@ -43,7 +63,11 @@ def save_image_from_arr(img_arr):
         :returns: uuid of image
     """
     uuid = uuid4().hex
-    img = Image.fromarray(img_arr)
+    try:
+        img = Image.fromarray(img_arr.astype('uint8'))
+    except ValueError:
+        return None
+
     img.save('images/{}.png'.format(uuid), 'PNG')
     return uuid
 
