@@ -1,1 +1,2 @@
-debug_*.py
+debug_backend.py
+backend.log
