@@ -96,4 +96,5 @@ def get_image_as_b64(uuid, filetype='png'):
             image.save(output, format=img_format)
             contents = base64.b64encode(output.getvalue()).decode()
             output.close()
-    return contents
+            return contents
+    return None

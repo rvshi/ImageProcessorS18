@@ -7,12 +7,6 @@ services:
     - "27017"
     volumes:
     - $PWD/db:/data/db
-  start_dependencies:
-      restart: always
-      image: dadarek/wait-for-dependencies
-      command: db:27017
-      depends_on:
-      - db
   backend:
     restart: always
     build: .
@@ -24,4 +18,4 @@ services:
     volumes:
     - $PWD/backend:/code
     depends_on:
-      - start_dependencies
+      - db
