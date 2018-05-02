@@ -1,3 +1,7 @@
+"""Module for interacting with database.
+
+"""
+
 import os
 from pymodm import fields, MongoModel, connect
 from pymodm.errors import DoesNotExist

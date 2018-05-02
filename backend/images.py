@@ -1,3 +1,6 @@
+"""Module for managing image storage on backend.
+
+"""
 import base64
 import numpy as np
 from PIL import Image

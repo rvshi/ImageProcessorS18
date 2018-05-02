@@ -1,3 +1,6 @@
+"""Module for handling requests.
+
+"""
 from flask import jsonify
 from flask_jwt_simple import create_jwt
 
