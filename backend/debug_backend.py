@@ -6,8 +6,8 @@ baseURL = 'http://localhost:5000/'
 test_img = 'exampleImages/test.jpg'
 filetype = 'jpeg'
 
-un = 'test@mail.com'
-pw = '12345'
+un = 'ed.l.1324@gmail.com'
+pw = 'bme590'
 
 
 def main():
@@ -30,6 +30,7 @@ def login(username, password):
         'password': password
     }
     r = requests.post(baseURL + 'login', json=body)
+    print(r.json())
     jwt = r.json()['jwt']
 
     __headers__ = {

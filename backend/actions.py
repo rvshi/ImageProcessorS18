@@ -20,7 +20,7 @@ def act_login(request):
         :param request: json request from client
         :returns: json of jwt
     """
-    params = request.get_json()
+    params = request
     username = params.get('username', None)
     password = params.get('password', None)
 
@@ -50,7 +50,7 @@ def act_upload(request):
         :param request: request from client
         :returns: uuid of uploaded image
     """
-    params = request.get_json()
+    params = request
     username = params.get('username', None)
     file = params.get('file', None)
 
@@ -70,7 +70,7 @@ def act_process(request):
         :returns: uuid of processed image
     """
 
-    username = request.get_json().get('username', None)
+    username = request.get('username', None)
 
     uuid = get_original_image(username)
     if uuid is None:
@@ -86,7 +86,7 @@ def act_download(request):
         :param request: json request from client
         :returns: b64 image string of processed image
     """
-    params = request.get_json()
+    params = request
     fileID = params.get('fileID', None)
     filetype = params.get('filetype', None)
 
