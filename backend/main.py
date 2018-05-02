@@ -1,3 +1,6 @@
+"""Main Flask app module with endpoints and authentication.
+
+"""
 from flask import Flask, request, jsonify
 from flask_jwt_simple import (
     JWTManager, jwt_required, get_jwt_identity
@@ -15,12 +18,12 @@ CORS(app)
 
 
 def handler(input, validator, action):
-    """Handles API endpoints
+    """Handles API requests
 
         :param input: input data from request
         :param validator: validator function to use
         :param action: database function to apply to data
-        :return: jsonified response
+        :returns: jsonified response
     """
     if not request.is_json:
         return jsonify({"error": "JSON missing"}), 400

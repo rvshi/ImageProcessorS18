@@ -7,6 +7,5 @@ backend
    actions
    database
    images
-   main
    segment
    validate

@@ -1,3 +1,6 @@
+"""Module for validating requests.
+
+"""
 from jsonschema import validate, ValidationError
 
 # Regex from http://usernameregex.com

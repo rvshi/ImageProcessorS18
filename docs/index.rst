@@ -13,7 +13,6 @@ Welcome to ImageProcessorS18's documentation!
    actions
    database
    images
-   main
    segment
    validate
 

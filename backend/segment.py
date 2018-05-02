@@ -1,3 +1,6 @@
+"""Module to handle segmentation process.
+
+"""
 from numpy import uint8
 from skimage import filters
 from skimage import exposure
