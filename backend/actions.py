@@ -1,16 +1,13 @@
 from flask import jsonify
-from flask import jsonify, request
 from flask_jwt_simple import create_jwt
 
 from pymodm.errors import DoesNotExist
 from pymodm import connect
 
 from segment import segment
-from database import(login_user,
-                     get_processed_image,
-                     get_original_image, save_original_image_uuid,
-                     save_processed_image_uuid,
-                     remove_images)
+from database import (login_user, get_processed_image, get_original_image,
+                      save_original_image_uuid, save_processed_image_uuid,
+                      remove_images)
 from images import save_image, get_image_by_uuid, get_image_as_b64
 
 
@@ -20,9 +17,9 @@ def act_login(request):
         :param request: json request from client
         :returns: json of jwt
     """
-    params = request
-    username = params.get('username', None)
-    password = params.get('password', None)
+
+    username = request.get('username', None)
+    password = request.get('password', None)
 
     # check if user exists and the password is correct
     if login_user(username, password):
@@ -38,7 +35,7 @@ def act_list(username):
         :param username: client username
         :returns: json including uuid's of original and processed images
     """
-    return(jsonify({
+    return (jsonify({
         'originalID': get_original_image(username),
         'processedID': get_processed_image(username)
     }), 200)
@@ -50,9 +47,9 @@ def act_upload(request):
         :param request: request from client
         :returns: uuid of uploaded image
     """
-    params = request
-    username = params.get('username', None)
-    file = params.get('file', None)
+
+    username = request.get('username', None)
+    file = request.get('file', None)
 
     uuid = save_image(file)
     if uuid is None:
@@ -86,9 +83,9 @@ def act_download(request):
         :param request: json request from client
         :returns: b64 image string of processed image
     """
-    params = request
-    fileID = params.get('fileID', None)
-    filetype = params.get('filetype', None)
+
+    fileID = request.get('fileID', None)
+    filetype = request.get('filetype', None)
 
     if fileID is None:
         return (jsonify({'error': 'Processed image not found'}), 400)

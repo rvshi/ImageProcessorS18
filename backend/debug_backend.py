@@ -3,8 +3,8 @@ import base64
 
 baseURL = 'http://localhost:5000/'
 
-test_img = 'exampleImages/test.jpg'
-filetype = 'jpeg'
+test_img = 'exampleImages/cornea.png'
+filetype = 'png'
 
 un = 'ed.l.1324@gmail.com'
 pw = 'bme590'
