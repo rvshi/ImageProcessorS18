@@ -49,11 +49,16 @@ SECRET_KEY = 'exampleKey'
 ```
 
 - The latter file is for the JWT generation process.
-- Run `docker-compose up -d` in the repo root directory to begin running the service (both backend and database).
-- Type `docker ps` to check that the backend and database are running.
+- To add users to the database:
+  - Start only the database by running `./run_db.sh`.
+  - Use the `add_user(username, password)` function in [database.py](backend/database.py) to add all the users you want.
+  - Note: you will need to change the [database.py](backend/database.py) line `connect("mongodb://mongo:27017/database")` to  `connect("mongodb://localhost:27017/database")` to be able to access the database locally.
+- To run the service for production, run `docker-compose up -d` in the repo root directory to build both the backend and database containers and to run the service.
+  - Type `docker ps` to check that the backend and database are running.
+  - To view logs, look for the `backend.log` file in the [backend](backend/) folder.
 ### Frontend
-- First, navigate to the `frontend/` folder.
-- To test the website locally, run `npm run start`.
-- Note, you may want to change the `baseURL` variable in [requests.js](frontend/src/requests.js) to point to your backend URL.
+- First, navigate to the [frontend/](frontend/) folder.
+  - To test the website locally, run `npm run start`.
+  - Note, you may want to change the `baseURL` variable in [requests.js](frontend/src/requests.js) to point to your backend URL.
 - To build the site for production, run `npm run build`. The production files will be in the `build/` directory.
   - You can then serve the files statically.
