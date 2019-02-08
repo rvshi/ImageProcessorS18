@@ -6,7 +6,8 @@
     "axios": "^0.18.0",
     "react": "^16.3.2",
     "react-dom": "^16.3.2",
-    "react-scripts": "1.1.4"
+    "react-scripts": "1.1.4",
+    "lodash": ">=4.17.11"
   },
   "homepage": "https://rvshi.github.io/ImageProcessorS18",
   "scripts": {
